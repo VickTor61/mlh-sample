@@ -1,0 +1,28 @@
+{
+  "name": "gadgetsden-service",
+  "version": "1.0.0",
+  "description": "Backend service for gadgetsDen",
+  "main": "dist/index.js",
+  "engines": {
+    "node": "18.x"
+  },
+  "scripts": {
+    "dev": "nodemon -r tsconfig-paths/register --files ./index.ts"
+  },
+  "repository": "git@github.com:VickTor61/gadgetsDen-service.git",
+  "author": "Victor Enoma",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/node": "^20.5.0",
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.1.6"
+  }
+}
