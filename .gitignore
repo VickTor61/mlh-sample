@@ -1,2 +1,9 @@
+# Dependencies
 node_modules
 dist
+
+# package-lock.json (use yarn.lock instead)
+yarn.lock
+
+# Envoronment Variables
+.env
