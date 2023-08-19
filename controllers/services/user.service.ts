@@ -1,10 +1,12 @@
 import userModel from "@database/models/user.model";
 import { hashPassword } from "../../helpers/user.helper";
+import httpStatus from "http-status";
+import ApiError from "../../utils/AppError";
 
 const checkDuplicateEmail = async (email: string) => {
   const foundUser = await userModel.findOne({ email });
   if (foundUser) {
-    return new Error("User already exits");
+    throw new ApiError(httpStatus.BAD_REQUEST, "User already exits");
   }
 };
 

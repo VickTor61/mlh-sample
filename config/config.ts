@@ -1,6 +1,8 @@
 import dotenv from "dotenv";
 import Joi from "joi";
 import path from "path";
+import httpStatus from "http-status";
+import ApiError from "../utils/AppError";
 
 dotenv.config({ path: path.join(__dirname, "../.env") });
 
@@ -19,7 +21,10 @@ const { value: envVars, error } = envSchemaVars
   .validate(process.env);
 
 if (error) {
-  throw new Error(`Config validation error ${error.message}`);
+  throw new ApiError(
+    httpStatus.UNPROCESSABLE_ENTITY,
+    `Config validation error ${error.message}`
+  );
 }
 
 const envs = {

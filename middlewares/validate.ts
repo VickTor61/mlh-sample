@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import Joi, { ObjectSchema } from "joi";
 import _ from "lodash";
+import ApiError from "../utils/AppError";
+import httpStatus from "http-status";
 
 const validate =
   (schema: {
@@ -21,7 +23,7 @@ const validate =
           return detail.message;
         })
         .join(", ");
-      return next(new Error(errorMessage));
+      return next(new ApiError(httpStatus.BAD_REQUEST, errorMessage));
     }
     Object.assign(req, value);
     return next();

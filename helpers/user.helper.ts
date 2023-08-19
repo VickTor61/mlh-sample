@@ -1,8 +1,13 @@
 import bcrypt from "bcryptjs";
+import httpStatus from "http-status";
+import ApiError from "../utils/AppError";
 
 export const hashPassword = async (password: string) => {
   if (password.length < 5) {
-    throw new Error("Password is too short");
+    throw new ApiError(
+      httpStatus.UNPROCESSABLE_ENTITY,
+      "Password is too short"
+    );
   }
   const saltRounds = 10;
   const salt = await bcrypt.genSalt(saltRounds);
