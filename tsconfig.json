@@ -9,7 +9,8 @@
       "*": ["types/*"],
       "@controllers/*": ["controllers/*"],
       "@database/*": ["database/*"],
-      "@routes": ["routes/*"]
+      "@routes/*": ["routes/*"],
+      "@middlewares/*": ["middlewares/*"]
     },
     "types": ["node"],
     "allowJs": true,
