@@ -1,14 +1,11 @@
 import { Request, Response } from "express";
 import { UserService } from "./services";
+import catchAsync from "../utils/catchAsync";
 
-const createUser = async (req: Request, res: Response) => {
-  try {
-    const response = await UserService.createUser(req.body);
-    res.send(response);
-  } catch (e) {
-    res.send(`Error ${e}`);
-  }
-};
+const createUser = catchAsync(async (req: Request, res: Response) => {
+  const response = await UserService.createUser(req.body);
+  res.send(response);
+});
 
 export default {
   createUser,
