@@ -9,6 +9,11 @@ const userSchema = new Schema({
     unique: true,
   },
   password: String,
+  role: {
+    type: String,
+    default: "Basic",
+    required: true,
+  },
 });
 
 export default mongoose.model<IUserModel>("User", userSchema);
