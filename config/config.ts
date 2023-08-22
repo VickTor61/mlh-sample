@@ -13,6 +13,8 @@ const envSchemaVars = Joi.object()
       .required()
       .description("Development database is required"),
     ENV: Joi.string(),
+    JWT_SECRET_KEY: Joi.string().required().description("jwt secret key"),
+    SECRET: Joi.string().required().description('Auth secret')
   })
   .unknown(true);
 
@@ -31,6 +33,8 @@ const envs = {
   port: envVars.PORT,
   dev_database_url: envVars.DEV_DATABASE_URL,
   env: envVars.ENV,
+  jwt_secret_key: envVars.JWT_SECRET_KEY,
+  secret: envVars.SECRET
 };
 
 export default envs;
