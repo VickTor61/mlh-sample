@@ -1,11 +1,14 @@
 import userModel from "@database/models/user.model";
-import {
-  hashPassword,
-  decryptPassword,
-  createToken,
-} from "../../helpers/user.helper";
+import Jwt, { JwtPayload } from "jsonwebtoken";
+import { Types } from "mongoose";
+import config from "../../config/config";
+import { hashPassword, decryptPassword } from "../../helpers/user.helper";
 import httpStatus from "http-status";
 import ApiError from "../../utils/AppError";
+import {
+  generateToken,
+  generateRefreshToken,
+} from "../../helpers/token.helper";
 
 type userCred = {
   firstname: string;
@@ -23,15 +26,14 @@ const checkDuplicateEmail = async (email: string) => {
 
 const createUser = async (userData: userCred) => {
   const { email, password } = userData;
-  await checkDuplicateEmail(email);
+  // await checkDuplicateEmail(email);
 
   const encryptedPassword = await hashPassword(password);
   const user = await userModel.create({
     ...userData,
     password: encryptedPassword.hash,
   });
-  const token = await createToken(user);
-  return { user, token };
+  return user;
 };
 
 const loginUser = async (loginData: userCred) => {
@@ -43,10 +45,24 @@ const loginUser = async (loginData: userCred) => {
   if (!(await decryptPassword(loginData.password, user.password))) {
     throw new ApiError(httpStatus.NOT_FOUND, "Login not successful");
   }
-
-  return user;
+  const token = await generateToken(user._id);
+  const refreshToken = await generateRefreshToken(user._id);
+  return { user, token, refreshToken };
 };
+
+const refreshToken = async (refreshToken: string) => {
+  const decodeToken = Jwt.verify(refreshToken, config.secret);
+  const { userId }: any = decodeToken;
+  const accessToken = await generateToken(userId);
+
+  if (!accessToken) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Invalid refresh token");
+  }
+  return accessToken
+};
+
 export default {
   createUser,
   loginUser,
+  refreshToken,
 };
