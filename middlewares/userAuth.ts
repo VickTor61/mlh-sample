@@ -4,21 +4,23 @@ import jwt from "jsonwebtoken";
 import config from "../config/config";
 import ApiError from "../utils/AppError";
 
-const userAuth = (req: Request, res: Response, next: Function) => {
-  const token = req.cookies.jwt;
-  if (token) {
-    jwt.verify(token, config.secret, (err: any, decodedToken: any) => {
-      if (err) {
-        throw new ApiError(httpStatus.UNAUTHORIZED, "Not authorized");
-      } else {
-        next();
-      }
-    });
-  } else {
+interface customRequest extends Request {
+  user?: any;
+}
+
+const userAuth = (req: customRequest, res: Response, next: Function) => {
+  const accessToken = req.headers["authorization"] as string;
+  const refreshToken = req.cookies["refreshToken"];
+
+  if (!accessToken && !refreshToken) {
     throw new ApiError(
       httpStatus.UNAUTHORIZED,
-      "Not authorised, token unavailable"
+      "Access Denied. No token provided."
     );
   }
+
+  const decodedToken: any = jwt.verify(accessToken, config.secret);
+  req.user = decodedToken.userId;
+  return next();
 };
 export default userAuth;

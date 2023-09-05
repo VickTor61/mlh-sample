@@ -1,8 +1,6 @@
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import httpStatus from "http-status";
 import ApiError from "../utils/AppError";
-import config from '../config/config'
 
 export const hashPassword = async (password: string) => {
   if (password.length < 5) {
@@ -23,15 +21,4 @@ export const decryptPassword = async (
 ) => {
   const comparePassword = await bcrypt.compare(password, hashedPassword);
   return comparePassword;
-};
-
-export const createToken = async (user: any) => {
-  const token = jwt.sign(
-    {
-      data: user,
-    },
-    config.secret,
-    { expiresIn: "1h" }
-  );
-  return token;
 };
