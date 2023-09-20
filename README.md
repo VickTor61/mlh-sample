@@ -1,4 +1,4 @@
-# GadegetsDen-service
+# mlh-sample
 
 # Installation
 
